@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<ruleset name="PloetnerLlmsTxt">
+	<description>Coding standard for the Ploetner llms.txt plugin.</description>
+
+	<file>src</file>
+	<file>tests</file>
+	<file>ploetner-llms-txt.php</file>
+
+	<!-- Only scan PHP files. -->
+	<arg name="extensions" value="php"/>
+	<!-- Show sniff codes and progress, use colors. -->
+	<arg value="sp"/>
+	<arg name="colors"/>
+	<!-- Use as many processes as available cores. -->
+	<arg name="parallel" value="8"/>
+
+	<config name="testVersion" value="8.1-"/>
+	<config name="minimum_wp_version" value="7.0"/>
+
+	<rule ref="WordPress-Extra"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="ploetner-llms-txt"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- PSR-4 class files are named ClassName.php, not class-name.php. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>src/*</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+</ruleset>

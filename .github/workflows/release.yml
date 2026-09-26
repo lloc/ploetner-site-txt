@@ -1,0 +1,38 @@
+name: Release
+
+# Push a version tag (e.g. v1.1.0) to build the deployable plugin zip and
+# attach it to a GitHub Release under a fixed name (ploetner-llms-txt.zip).
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build zip and publish release asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install production dependencies
+        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-progress
+
+      - name: Assemble deployable zip (fixed name, versionless folder)
+        run: bash bin/git-release.sh
+
+      - name: Publish release with the zip asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ploetner-llms-txt.zip
+          generate_release_notes: true

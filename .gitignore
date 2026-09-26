@@ -1,0 +1,6 @@
+.DS_Store
+.idea/
+/.phpunit.cache/
+/vendor/
+ploetner-llms-txt.zip
+ploetner-llms-txt/

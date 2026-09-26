@@ -1,0 +1,17 @@
+.distignore
+.gitignore
+.wp-env.json
+patchwork.json
+/.git
+/.github
+/.idea
+/.phpunit.cache
+/bin
+/ploetner-llms-txt/
+/tests
+README.md
+composer.lock
+phpcs.xml.dist
+phpstan.neon.dist
+phpunit.xml.dist
+ploetner-llms-txt.zip
