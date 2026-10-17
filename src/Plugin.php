@@ -24,6 +24,10 @@ class Plugin {
 
 		( new Settings() )->register();
 		( new Server() )->register();
+
+		if ( is_admin() ) {
+			( new MuLoaderNotice() )->register();
+		}
 	}
 
 	/**

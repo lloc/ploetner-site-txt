@@ -24,6 +24,18 @@ class PluginTest extends TestCase {
 	public function test_register_wires_hooks(): void {
 		// 1 (textdomain) + 2 (settings, expiry notice) + 1 (server) = 4 add_action calls.
 		Functions\expect( 'add_action' )->times( 4 );
+		Functions\when( 'is_admin' )->justReturn( false );
+
+		( new Plugin() )->register();
+	}
+
+	/**
+	 * @covers ::register
+	 */
+	public function test_register_adds_the_mu_loader_notice_in_the_admin(): void {
+		Functions\when( 'add_action' )->justReturn( true );
+		Functions\when( 'is_admin' )->justReturn( true );
+		Functions\expect( 'add_filter' )->times( 3 );
 
 		( new Plugin() )->register();
 	}
