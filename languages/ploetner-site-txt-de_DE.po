@@ -1,41 +1,42 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Ploetner llms.txt 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ploetner-site-txt\n"
+"POT-Creation-Date: 2026-09-26T17:57:19+00:00\n"
+"PO-Revision-Date: 2026-10-17T09:25:54+00:00\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-26T17:57:19+00:00\n"
-"PO-Revision-Date: 2026-10-17T09:25:54+00:00\n"
-"Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: ploetner-site-txt\n"
 "X-LlmsTxt: WP-CLI 2.12.0\n"
 
 #. Plugin Name of the plugin
-#: ploetner-site-txt.php:3
+#: ploetner-site-txt.php
 msgid "Ploetner Site TXT"
 msgstr "Ploetner Site TXT"
 
 #. Plugin URI of the plugin
-#: ploetner-site-txt.php:4
+#: ploetner-site-txt.php
 msgid "https://github.com/lloc/ploetner-site-txt"
 msgstr ""
 
 #. Description of the plugin
-#: ploetner-site-txt.php:5
+#: ploetner-site-txt.php
 msgid "Serves per-site text files in multisite and multi-network installs: llms.txt (from a text field, or generated from the site) and /.well-known/security.txt (RFC 9116), both under Settings, Reading."
 msgstr "Liefert Textdateien pro Site in Multisite- und Multi-Network-Installationen aus: llms.txt (aus einem Textfeld oder aus der Site erzeugt) und /.well-known/security.txt (RFC 9116), beide unter Einstellungen, Lesen."
 
 #. Author of the plugin
-#: ploetner-site-txt.php:10
+#: ploetner-site-txt.php
 msgid "Dennis Ploetner"
 msgstr ""
 
 #. Author URI of the plugin
-#: ploetner-site-txt.php:11
+#: ploetner-site-txt.php
 msgid "https://ploetner.dev"
 msgstr ""
 
@@ -114,3 +115,7 @@ msgstr[1] "Die security.txt dieser Site läuft in %d Tagen ab. Bitte prüfen und
 #: src/Settings.php:278
 msgid "Review security.txt"
 msgstr "security.txt prüfen"
+
+#: src/MuLoaderNotice.php:77
+msgid "Loaded on every site by a must-use loader (mu-plugins). No activation needed."
+msgstr "Wird über einen Must-Use-Loader (mu-plugins) auf jeder Site geladen. Keine Aktivierung nötig."
