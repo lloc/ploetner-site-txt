@@ -112,8 +112,10 @@ class SecurityTxt implements TextFile {
 				$uris[] = 'mailto:' . $line;
 			} elseif ( preg_match( '#^mailto:(.+)$#i', $line, $m ) && is_email( $m[1] ) ) {
 				$uris[] = 'mailto:' . $m[1];
-			} elseif ( preg_match( '#^https://\S+$#i', $line ) || preg_match( '#^tel:\+?[0-9 ().-]+$#i', $line ) ) {
+			} elseif ( preg_match( '#^https://\S+$#i', $line ) ) {
 				$uris[] = $line;
+			} elseif ( preg_match( '#^tel:\+?[0-9 ().-]+$#i', $line ) ) {
+				$uris[] = str_replace( ' ', '', $line ); // RFC 3966 allows no spaces.
 			}
 		}
 
@@ -128,7 +130,7 @@ class SecurityTxt implements TextFile {
 	 * @return int|null
 	 */
 	public static function expires_at( string $expires ): ?int {
-		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $expires ) ) {
+		if ( ! preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $expires, $m ) || ! checkdate( (int) $m[2], (int) $m[3], (int) $m[1] ) ) {
 			return null;
 		}
 

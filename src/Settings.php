@@ -31,13 +31,6 @@ class Settings {
 	public const MAX_LENGTH = 100000;
 
 	/**
-	 * Labels of the optional security.txt URL fields.
-	 *
-	 * @var list<string>
-	 */
-	public const SECURITY_URLS = array( 'policy', 'encryption', 'acknowledgments' );
-
-	/**
 	 * Hook setting registration and the expiry reminder.
 	 *
 	 * @return void
@@ -123,8 +116,8 @@ class Settings {
 
 	/**
 	 * Clean the security.txt fields. Contacts are kept only if usable, URLs
-	 * must be https, and a missing or past expiry date becomes one year from
-	 * today (RFC 9116 recommends less than a year).
+	 * must be https, and a missing or past expiry date becomes the day before
+	 * one year from today (RFC 9116 recommends less than a year).
 	 *
 	 * @param mixed $value Submitted value.
 	 *
@@ -136,7 +129,7 @@ class Settings {
 
 		$fields['contact'] = implode( "\n", SecurityTxt::contacts( isset( $value['contact'] ) && is_string( $value['contact'] ) ? $value['contact'] : '' ) );
 
-		foreach ( self::SECURITY_URLS as $key ) {
+		foreach ( array_keys( SecurityTxt::URL_FIELDS ) as $key ) {
 			$url            = isset( $value[ $key ] ) && is_string( $value[ $key ] ) ? trim( $value[ $key ] ) : '';
 			$fields[ $key ] = preg_match( '#^https://\S+$#i', $url ) ? esc_url_raw( $url, array( 'https' ) ) : '';
 		}
@@ -148,7 +141,7 @@ class Settings {
 		$expires = isset( $value['expires'] ) && is_string( $value['expires'] ) ? trim( $value['expires'] ) : '';
 		$at      = SecurityTxt::expires_at( $expires );
 		if ( '' !== $fields['contact'] && ( null === $at || $at < time() ) ) {
-			$expires = gmdate( 'Y-m-d', strtotime( '+1 year' ) );
+			$expires = gmdate( 'Y-m-d', strtotime( '+1 year -1 day' ) );
 		}
 		$fields['expires'] = null === SecurityTxt::expires_at( $expires ) ? '' : $expires;
 
@@ -266,13 +259,17 @@ class Settings {
 			return;
 		}
 
-		$text = $days < 0
-			? __( 'The security.txt of this site has expired. Please review the contact details and set a new date.', 'ploetner-site-txt' )
-			: sprintf(
+		if ( $days < 0 ) {
+			$text = __( 'The security.txt of this site has expired. Please review the contact details and set a new date.', 'ploetner-site-txt' );
+		} elseif ( 0 === $days ) {
+			$text = __( 'The security.txt of this site expires today. Please review it and set a new date.', 'ploetner-site-txt' );
+		} else {
+			$text = sprintf(
 				/* translators: %d: number of days. */
 				_n( 'The security.txt of this site expires in %d day. Please review it and set a new date.', 'The security.txt of this site expires in %d days. Please review it and set a new date.', $days, 'ploetner-site-txt' ),
 				$days
 			);
+		}
 
 		printf(
 			'<div class="notice notice-warning"><p>%s <a href="%s">%s</a></p></div>',

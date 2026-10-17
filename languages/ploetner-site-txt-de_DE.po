@@ -1,113 +1,116 @@
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: Ploetner llms.txt 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ploetner-site-txt\n"
-"POT-Creation-Date: 2026-09-26T17:57:19+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
-"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-26T17:57:19+00:00\n"
+"PO-Revision-Date: 2026-10-17T09:25:54+00:00\n"
+"Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: ploetner-site-txt\n"
 "X-LlmsTxt: WP-CLI 2.12.0\n"
 
+#. Plugin Name of the plugin
+#: ploetner-site-txt.php:3
+msgid "Ploetner Site TXT"
+msgstr "Ploetner Site TXT"
+
 #. Plugin URI of the plugin
-#: ploetner-site-txt.php
+#: ploetner-site-txt.php:4
 msgid "https://github.com/lloc/ploetner-site-txt"
 msgstr ""
 
+#. Description of the plugin
+#: ploetner-site-txt.php:5
+msgid "Serves per-site text files in multisite and multi-network installs: llms.txt (from a text field, or generated from the site) and /.well-known/security.txt (RFC 9116), both under Settings, Reading."
+msgstr "Liefert Textdateien pro Site in Multisite- und Multi-Network-Installationen aus: llms.txt (aus einem Textfeld oder aus der Site erzeugt) und /.well-known/security.txt (RFC 9116), beide unter Einstellungen, Lesen."
+
 #. Author of the plugin
-#: ploetner-site-txt.php
+#: ploetner-site-txt.php:10
 msgid "Dennis Ploetner"
 msgstr ""
 
 #. Author URI of the plugin
-#: ploetner-site-txt.php
+#: ploetner-site-txt.php:11
 msgid "https://ploetner.dev"
 msgstr ""
 
-#: src/Settings.php:87
-msgid "llms.txt"
-msgstr "llms.txt"
-
-#: src/Settings.php:172
-msgid "Markdown for this site's llms.txt. Leave empty to generate it from the site title, tagline and top-level pages."
-msgstr "Markdown für die llms.txt dieser Site. Leer lassen, um sie aus Titel, Untertitel und den obersten Seiten zu erzeugen."
-
-#: src/Settings.php:174
-msgid "View llms.txt"
-msgstr "llms.txt ansehen"
-
-#. Plugin Name of the plugin
-#: ploetner-site-txt.php
-msgid "Ploetner Site TXT"
-msgstr "Ploetner Site TXT"
-
-#. Description of the plugin
-#: ploetner-site-txt.php
-msgid "Serves per-site text files in multisite and multi-network installs: llms.txt (from a text field, or generated from the site) and /.well-known/security.txt (RFC 9116), both under Settings, Reading."
-msgstr "Liefert Textdateien pro Site in Multisite- und Multi-Network-Installationen aus: llms.txt (aus einem Textfeld oder aus der Site erzeugt) und /.well-known/security.txt (RFC 9116), beide unter Einstellungen, Lesen."
-
-#: src/Settings.php:80
+#: src/Settings.php:73
 msgid "Site text files"
 msgstr "Textdateien der Site"
 
-#: src/Settings.php:96
+#: src/Settings.php:80
+msgid "llms.txt"
+msgstr "llms.txt"
+
+#: src/Settings.php:89
 msgid "security.txt"
 msgstr "security.txt"
 
-#: src/Settings.php:187
+#: src/Settings.php:165
+msgid "Markdown for this site's llms.txt. Leave empty to generate it from the site title, tagline and top-level pages."
+msgstr "Markdown für die llms.txt dieser Site. Leer lassen, um sie aus Titel, Untertitel und den obersten Seiten zu erzeugen."
+
+#: src/Settings.php:167
+msgid "View llms.txt"
+msgstr "llms.txt ansehen"
+
+#: src/Settings.php:180
 msgid "A security.txt belongs to the root of a domain. It is set on the site at the root of this domain, not here."
 msgstr "Eine security.txt gehört an die Wurzel einer Domain. Sie wird auf der Site an der Wurzel dieser Domain eingerichtet, nicht hier."
 
-#: src/Settings.php:201
+#: src/Settings.php:194
 msgid "Contact (required): e-mail addresses or https links, one per line. Leave empty to serve no security.txt."
 msgstr "Kontakt (Pflicht): E-Mail-Adressen oder https-Links, einer pro Zeile. Leer lassen, um keine security.txt auszuliefern."
 
-#: src/Settings.php:209
+#: src/Settings.php:202
 msgid "Expires: when the details should be reviewed. Empty or past: one year from today."
 msgstr "Ablaufdatum: wann die Angaben überprüft werden sollen. Leer oder vergangen: ein Jahr ab heute."
 
-#: src/Settings.php:215
+#: src/Settings.php:208
 msgid "Policy (optional): https link to your disclosure policy"
 msgstr "Richtlinie (optional): https-Link zur Disclosure-Policy"
 
-#: src/Settings.php:216
+#: src/Settings.php:209
 msgid "Encryption (optional): https link to your OpenPGP key"
 msgstr "Verschlüsselung (optional): https-Link zum OpenPGP-Schlüssel"
 
-#: src/Settings.php:217
+#: src/Settings.php:210
 msgid "Acknowledgments (optional): https link to a thank-you page"
 msgstr "Danksagungen (optional): https-Link zu einer Dankesseite"
 
-#: src/Settings.php:232
+#: src/Settings.php:225
 msgid "Preferred languages (optional), e.g. \"en, de\". Empty: the site language."
 msgstr "Bevorzugte Sprachen (optional), z. B. „en, de“. Leer: die Sprache der Site."
 
-#: src/Settings.php:242
+#: src/Settings.php:235
 msgid "Served at /.well-known/security.txt (RFC 9116)."
 msgstr "Ausgeliefert unter /.well-known/security.txt (RFC 9116)."
 
-#: src/Settings.php:244
+#: src/Settings.php:237
 msgid "View security.txt"
 msgstr "security.txt ansehen"
 
-#: src/Settings.php:270
+#: src/Settings.php:263
 msgid "The security.txt of this site has expired. Please review the contact details and set a new date."
 msgstr "Die security.txt dieser Site ist abgelaufen. Bitte die Kontaktangaben prüfen und ein neues Datum setzen."
 
+#: src/Settings.php:265
+msgid "The security.txt of this site expires today. Please review it and set a new date."
+msgstr "Die security.txt dieser Site läuft heute ab. Bitte prüfen und ein neues Datum setzen."
+
 #. translators: %d: number of days.
-#: src/Settings.php:273
+#: src/Settings.php:269
 #, php-format
 msgid "The security.txt of this site expires in %d day. Please review it and set a new date."
 msgid_plural "The security.txt of this site expires in %d days. Please review it and set a new date."
 msgstr[0] "Die security.txt dieser Site läuft in %d Tag ab. Bitte prüfen und ein neues Datum setzen."
 msgstr[1] "Die security.txt dieser Site läuft in %d Tagen ab. Bitte prüfen und ein neues Datum setzen."
 
-#: src/Settings.php:281
+#: src/Settings.php:278
 msgid "Review security.txt"
 msgstr "security.txt prüfen"

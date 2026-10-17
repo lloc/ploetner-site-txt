@@ -111,6 +111,7 @@ class Server {
 		$this->header( 'Content-Type: text/plain; charset=utf-8' );
 		$this->header( 'Cache-Control: public, max-age=' . self::MAX_AGE );
 		$this->header( 'X-Robots-Tag: noindex' );
+		$this->header( 'X-Content-Type-Options: nosniff' );
 
 		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'HEAD' === $_SERVER['REQUEST_METHOD'] ) {
 			return;

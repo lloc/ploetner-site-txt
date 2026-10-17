@@ -87,23 +87,24 @@ class LlmsTxt implements TextFile {
 	 * @return list<string>
 	 */
 	private function page_links(): array {
+		$front_id = (int) get_option( 'page_on_front' );
+		$front    = $front_id > 0 ? get_post( $front_id ) : null;
+		$front    = $front instanceof \WP_Post && 'page' === $front->post_type && 'publish' === $front->post_status ? $front : null;
+
+		// The front page is fetched on its own, so it is listed even if it sorts past MAX_PAGES.
 		$pages = get_pages(
 			array(
 				'parent'      => 0,
 				'sort_column' => 'menu_order,post_title',
-				'number'      => self::MAX_PAGES,
+				'number'      => self::MAX_PAGES - ( null === $front ? 0 : 1 ),
+				'exclude'     => null === $front ? array() : array( $front->ID ),
 			)
 		);
 
-		if ( ! is_array( $pages ) ) {
-			return array();
+		$pages = is_array( $pages ) ? $pages : array();
+		if ( null !== $front ) {
+			array_unshift( $pages, $front );
 		}
-
-		$front = (int) get_option( 'page_on_front' );
-		usort(
-			$pages,
-			static fn ( \WP_Post $a, \WP_Post $b ): int => (int) ( $b->ID === $front ) <=> (int) ( $a->ID === $front )
-		);
 
 		$links = array();
 		foreach ( $pages as $page ) {

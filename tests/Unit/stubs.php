@@ -16,5 +16,7 @@ if ( ! class_exists( 'WP_Post' ) ) {
 		public string $post_name     = '';
 		public string $post_excerpt  = '';
 		public string $post_password = '';
+		public string $post_type     = 'page';
+		public string $post_status   = 'publish';
 	}
 }
