@@ -1,21 +1,24 @@
 <?php
 /**
- * Tests for the llms.txt server.
+ * Tests for the text file server.
  *
- * @package PloetnerLlmsTxt
+ * @package PloetnerSiteTxt
  */
 
 declare(strict_types=1);
 
-namespace lloc\PloetnerLlmsTxt\Tests\Unit;
+namespace lloc\PloetnerSiteTxt\Tests\Unit;
 
 use Brain\Monkey\Functions;
-use lloc\PloetnerLlmsTxt\Server;
-use lloc\PloetnerLlmsTxt\Tests\TestCase;
+use lloc\PloetnerSiteTxt\LlmsTxt;
+use lloc\PloetnerSiteTxt\SecurityTxt;
+use lloc\PloetnerSiteTxt\Server;
+use lloc\PloetnerSiteTxt\TextFile;
+use lloc\PloetnerSiteTxt\Tests\TestCase;
 use Mockery;
 
 /**
- * @coversDefaultClass \lloc\PloetnerLlmsTxt\Server
+ * @coversDefaultClass \lloc\PloetnerSiteTxt\Server
  */
 class ServerTest extends TestCase {
 
@@ -46,32 +49,68 @@ class ServerTest extends TestCase {
 	}
 
 	/**
-	 * @return array<string, array{0: string, 1: string, 2: bool}>
+	 * A file double with a fixed path.
+	 *
+	 * @param string $path Path below the home URL.
+	 *
+	 * @return TextFile
+	 */
+	private static function file( string $path ): TextFile {
+		return new class( $path ) implements TextFile {
+			public function __construct( private string $path ) {}
+			public function path(): string {
+				return $this->path;
+			}
+			public function content(): string {
+				return 'x';
+			}
+		};
+	}
+
+	/**
+	 * @return array<string, array{0: string, 1: string, 2: string|null}>
 	 */
 	public static function path_provider(): array {
 		return array(
-			'root site'                => array( 'https://ploetner.cloud/llms.txt', '/llms.txt', true ),
-			'root site with query'     => array( 'https://ploetner.cloud/llms.txt', '/llms.txt?ref=x', true ),
-			'other file'               => array( 'https://ploetner.cloud/llms.txt', '/llms-full.txt', false ),
-			'nested path'              => array( 'https://ploetner.cloud/llms.txt', '/audit/llms.txt', false ),
-			'subdirectory site'        => array( 'https://example.com/site/llms.txt', '/site/llms.txt', true ),
-			'root file on subdir site' => array( 'https://example.com/site/llms.txt', '/llms.txt', false ),
-			'empty uri'                => array( 'https://ploetner.cloud/llms.txt', '', false ),
+			'root site llms'           => array( 'https://ploetner.cloud', '/llms.txt', '/llms.txt' ),
+			'root site with query'     => array( 'https://ploetner.cloud', '/llms.txt?ref=x', '/llms.txt' ),
+			'root site security'       => array( 'https://ploetner.cloud', '/.well-known/security.txt', '/.well-known/security.txt' ),
+			'other file'               => array( 'https://ploetner.cloud', '/llms-full.txt', null ),
+			'nested path'              => array( 'https://ploetner.cloud', '/audit/llms.txt', null ),
+			'subdirectory site'        => array( 'https://example.com/site', '/site/llms.txt', '/llms.txt' ),
+			'root file on subdir site' => array( 'https://example.com/site', '/llms.txt', null ),
+			'root security on subdir'  => array( 'https://example.com/site', '/.well-known/security.txt', null ),
+			'empty uri'                => array( 'https://ploetner.cloud', '', null ),
 		);
 	}
 
 	/**
-	 * @covers ::is_llms_txt
+	 * @covers ::match
 	 * @dataProvider path_provider
 	 *
-	 * @param string $home     URL returned by home_url( '/llms.txt' ).
-	 * @param string $uri      Request URI.
-	 * @param bool   $expected Expected result.
+	 * @param string      $home     Home URL of the current site.
+	 * @param string      $uri      Request URI.
+	 * @param string|null $expected Path of the matched file, or null.
 	 */
-	public function test_is_llms_txt( string $home, string $uri, bool $expected ): void {
-		Functions\when( 'home_url' )->justReturn( $home );
+	public function test_match( string $home, string $uri, ?string $expected ): void {
+		Functions\when( 'home_url' )->alias( static fn ( string $path = '' ): string => $home . $path );
 
-		$this->assertSame( $expected, ( new Server() )->is_llms_txt( $uri ) );
+		$server = new Server( array( self::file( '/llms.txt' ), self::file( '/.well-known/security.txt' ) ) );
+		$file   = $server->match( $uri );
+
+		$this->assertSame( $expected, null === $file ? null : $file->path() );
+	}
+
+	/**
+	 * @covers ::__construct
+	 */
+	public function test_default_files_are_llms_and_security_txt(): void {
+		Functions\when( 'home_url' )->alias( static fn ( string $path = '' ): string => 'https://ploetner.cloud' . $path );
+
+		$server = new Server();
+
+		$this->assertInstanceOf( LlmsTxt::class, $server->match( '/llms.txt' ) );
+		$this->assertInstanceOf( SecurityTxt::class, $server->match( '/.well-known/security.txt' ) );
 	}
 
 	/**

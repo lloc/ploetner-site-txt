@@ -1,6 +1,6 @@
 {
-    "name": "lloc/ploetner-llms-txt",
-    "description": "Serves a per-site llms.txt in WordPress multisite and multi-network installs, from a per-site setting or generated from the site.",
+    "name": "lloc/ploetner-site-txt",
+    "description": "llms.txt and security.txt for every site in a WordPress multisite network.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "lloc\\PloetnerLlmsTxt\\": "src/"
+            "lloc\\PloetnerSiteTxt\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "lloc\\PloetnerLlmsTxt\\Tests\\": "tests/"
+            "lloc\\PloetnerSiteTxt\\Tests\\": "tests/"
         }
     },
     "config": {

@@ -1,23 +1,24 @@
 <?php
 /**
- * Answers requests for /llms.txt.
+ * Answers requests for the per-site text files.
  *
- * @package PloetnerLlmsTxt
+ * @package PloetnerSiteTxt
  */
 
 declare(strict_types=1);
 
-namespace lloc\PloetnerLlmsTxt;
+namespace lloc\PloetnerSiteTxt;
 
 use WP;
 
 /**
- * Serves /llms.txt at the root of each site. No rewrite rules to flush: the
- * request path is compared on `parse_request`, which also works for sites in
- * subdirectories (example.com/site/llms.txt) and with domain mapping.
+ * Serves each TextFile below the current site's home URL. No rewrite rules to
+ * flush: the request path is compared on `parse_request`, which also works for
+ * sites in subdirectories (example.com/site/llms.txt) and with domain mapping.
  *
- * A physical llms.txt in the document root would be served for every site of
- * the network by the web server, before WordPress runs. Do not create one.
+ * A physical llms.txt or .well-known/security.txt in the document root would
+ * be served for every site of the network by the web server, before WordPress
+ * runs. Do not create one.
  */
 class Server {
 
@@ -27,19 +28,19 @@ class Server {
 	public const MAX_AGE = 3600;
 
 	/**
-	 * Generator of the content.
+	 * Files this server answers for.
 	 *
-	 * @var Generator
+	 * @var list<TextFile>
 	 */
-	private Generator $generator;
+	private array $files;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Generator|null $generator Content generator.
+	 * @param list<TextFile>|null $files Files to serve, defaults to llms.txt and security.txt.
 	 */
-	public function __construct( ?Generator $generator = null ) {
-		$this->generator = $generator ?? new Generator();
+	public function __construct( ?array $files = null ) {
+		$this->files = $files ?? array( new LlmsTxt(), new SecurityTxt() );
 	}
 
 	/**
@@ -52,40 +53,49 @@ class Server {
 	}
 
 	/**
-	 * Serve llms.txt and stop, if that is what was requested.
+	 * Serve a file and stop, if one was requested.
 	 *
 	 * @param WP $wp Current WordPress environment (unused).
 	 *
 	 * @return void
 	 */
 	public function maybe_serve( $wp ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Hook signature.
-		$uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_url( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		if ( ! $this->is_llms_txt( $uri ) ) {
+		$uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_url( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$file = $this->match( $uri );
+		if ( null === $file ) {
 			return;
 		}
 
-		$this->send( $this->generator->content() );
+		$this->send( $file->content() );
 		exit;
 	}
 
 	/**
-	 * Whether a request URI asks for this site's llms.txt.
+	 * The file a request URI asks for, if any.
 	 *
 	 * @param string $request_uri Request URI, e.g. "/llms.txt" or "/site/llms.txt?x=1".
 	 *
-	 * @return bool
+	 * @return TextFile|null
 	 */
-	public function is_llms_txt( string $request_uri ): bool {
-		$path     = (string) wp_parse_url( $request_uri, PHP_URL_PATH );
-		$expected = (string) wp_parse_url( home_url( '/llms.txt' ), PHP_URL_PATH );
+	public function match( string $request_uri ): ?TextFile {
+		$path = (string) wp_parse_url( $request_uri, PHP_URL_PATH );
+		if ( '' === $path ) {
+			return null;
+		}
 
-		return '' !== $path && $expected === $path;
+		foreach ( $this->files as $file ) {
+			if ( (string) wp_parse_url( home_url( $file->path() ), PHP_URL_PATH ) === $path ) {
+				return $file;
+			}
+		}
+
+		return null;
 	}
 
 	/**
 	 * Send headers and body. An empty body answers 404.
 	 *
-	 * @param string $content Markdown content.
+	 * @param string $content Plain-text content.
 	 *
 	 * @return void
 	 */

@@ -2,7 +2,7 @@
 /**
  * Minimal WordPress class stubs for the unit tests.
  *
- * @package PloetnerLlmsTxt
+ * @package PloetnerSiteTxt
  */
 
 declare(strict_types=1);

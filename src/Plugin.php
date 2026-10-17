@@ -2,12 +2,12 @@
 /**
  * Plugin bootstrap.
  *
- * @package PloetnerLlmsTxt
+ * @package PloetnerSiteTxt
  */
 
 declare(strict_types=1);
 
-namespace lloc\PloetnerLlmsTxt;
+namespace lloc\PloetnerSiteTxt;
 
 /**
  * Wires every component of the plugin to WordPress.
@@ -32,6 +32,6 @@ class Plugin {
 	 * @return void
 	 */
 	public function load_textdomain(): void {
-		load_plugin_textdomain( 'ploetner-llms-txt', false, basename( dirname( __DIR__ ) ) . '/languages' );
+		load_plugin_textdomain( 'ploetner-site-txt', false, basename( dirname( __DIR__ ) ) . '/languages' );
 	}
 }
