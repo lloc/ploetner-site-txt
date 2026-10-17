@@ -2,12 +2,12 @@
 /**
  * Builds the llms.txt content of the current site.
  *
- * @package PloetnerLlmsTxt
+ * @package PloetnerSiteTxt
  */
 
 declare(strict_types=1);
 
-namespace lloc\PloetnerLlmsTxt;
+namespace lloc\PloetnerSiteTxt;
 
 /**
  * The content is the text from Settings, Reading if the site has one, else a
@@ -15,7 +15,7 @@ namespace lloc\PloetnerLlmsTxt;
  * Everything works on the current site, so it behaves the same in single-site,
  * multisite and multi-network installs.
  */
-class Generator {
+class LlmsTxt implements TextFile {
 
 	/**
 	 * Most top-level pages listed in the generated default.
@@ -23,12 +23,19 @@ class Generator {
 	public const MAX_PAGES = 25;
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function path(): string {
+		return '/llms.txt';
+	}
+
+	/**
 	 * The llms.txt of the current site, or an empty string to serve none.
 	 *
 	 * @return string
 	 */
 	public function content(): string {
-		$stored  = trim( (string) get_option( Settings::OPTION, '' ) );
+		$stored  = trim( (string) get_option( Settings::LLMS_OPTION, '' ) );
 		$content = '' !== $stored ? $stored : $this->generate();
 
 		/**

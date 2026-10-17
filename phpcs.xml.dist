@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<ruleset name="PloetnerLlmsTxt">
-	<description>Coding standard for the Ploetner llms.txt plugin.</description>
+<ruleset name="PloetnerSiteTxt">
+	<description>Coding standard for the Ploetner Site TXT plugin.</description>
 
 	<file>src</file>
 	<file>tests</file>
-	<file>ploetner-llms-txt.php</file>
+	<file>ploetner-site-txt.php</file>
 
 	<!-- Only scan PHP files. -->
 	<arg name="extensions" value="php"/>
@@ -22,7 +22,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="ploetner-llms-txt"/>
+				<element value="ploetner-site-txt"/>
 			</property>
 		</properties>
 	</rule>

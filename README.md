@@ -1,11 +1,15 @@
-# Ploetner llms.txt
+# Ploetner Site TXT
 
-Serves a per-site [`llms.txt`](https://llmstxt.org/) in WordPress multisite and
-multi-network installs. Every site answers `/llms.txt` with its own content:
-the Markdown from its settings, or a default generated from the site.
+**llms.txt and security.txt for every site in a WordPress multisite network.**
 
-Built for the Ploetner network (ploetner.cloud, ploetner.dev, msls.co, ...),
-where all sites share one document root.
+Each site answers with its own files: [`/llms.txt`](https://llmstxt.org/) and
+[`/.well-known/security.txt`](https://www.rfc-editor.org/rfc/rfc9116), set
+under Settings, Reading. Works for subdirectory networks, mapped domains and
+multi-network installs that share one document root.
+
+Built for the Ploetner network (ploetner.cloud, ploetner.dev, msls.co, ...).
+Formerly `ploetner-llms-txt`: the llms.txt option and filter keep their names,
+so existing content stays.
 
 ## Requirements
 
@@ -26,16 +30,37 @@ where all sites share one document root.
   max-age=3600`, `X-Robots-Tag: noindex`. `HEAD` gets headers only. An empty
   result answers `404`.
 
-**Do not put a physical `llms.txt` in the document root.** The web server would
-serve that one file for every site of the network, before WordPress runs.
+### security.txt
 
-### Filter
+- **Where:** RFC 9116 looks at the root of a host only. The site at the root of
+  each domain gets the fields (the main site of a subdirectory network, every
+  site with its own domain); sites in a subdirectory show a note instead.
+- **Fields:** Contact (required; e-mail addresses become `mailto:`, `https` and
+  `tel:` links pass), Expires (required; empty or past becomes one year from
+  today on save), Policy, Encryption and Acknowledgments (optional, `https`
+  only), Preferred-Languages (defaults to the site language). `Canonical` is
+  added automatically.
+- **No contact, no file:** without a contact the path answers `404`.
+- **Reminder:** administrators see a dashboard notice from 30 days before
+  Expires, and after it has passed.
+
+**Do not put a physical `llms.txt` or `.well-known/security.txt` in the
+document root.** The web server would serve that one file for every site of
+the network, before WordPress runs. If your CDN generates a security.txt
+(e.g. Cloudflare), use one or the other, not both.
+
+### Filters
 
 ```php
 // Add a section on one brand's sites, or return '' to switch llms.txt off (404).
 add_filter( 'ploetner_llms_txt', function ( string $content, int $blog_id, bool $stored ): string {
 	return $content . "\n\n## Optional\n\n- [Site check API](https://ploetner.cloud/wp-json/ploetner-cloud/v1/check?url=example.com)";
 }, 10, 3 );
+
+// Change or switch off the security.txt of a site (empty string: 404).
+add_filter( 'ploetner_security_txt', function ( string $content, int $blog_id ): string {
+	return $content;
+}, 10, 2 );
 ```
 
 ## Installation
@@ -47,8 +72,8 @@ of every network, use a must-use loader instead of activating it:
 
 ```php
 <?php
-// wp-content/mu-plugins/ploetner-llms-txt.php
-require WP_PLUGIN_DIR . '/ploetner-llms-txt/ploetner-llms-txt.php';
+// wp-content/mu-plugins/ploetner-site-txt.php
+require WP_PLUGIN_DIR . '/ploetner-site-txt/ploetner-site-txt.php';
 ```
 
 Single sites work too: activate it like any plugin.
@@ -61,7 +86,7 @@ every pull request and on pushes to `dev`.
 
 On each push to `dev`, the **Build** job assembles the deployable plugin
 (`composer install --no-dev`, filtered through `.distignore`) and force-pushes
-it to `main`. A version tag (`v*`) builds `ploetner-llms-txt.zip` and attaches it
+it to `main`. A version tag (`v*`) builds `ploetner-site-txt.zip` and attaches it
 to a GitHub Release.
 
 ## Quality checks
@@ -78,7 +103,7 @@ composer qa        # all three
 German ships in `languages/`.
 
 ```bash
-vendor/bin/wp i18n make-pot . languages/ploetner-llms-txt.pot
-vendor/bin/wp i18n update-po languages/ploetner-llms-txt.pot languages
+vendor/bin/wp i18n make-pot . languages/ploetner-site-txt.pot
+vendor/bin/wp i18n update-po languages/ploetner-site-txt.pot languages
 vendor/bin/wp i18n make-mo languages && vendor/bin/wp i18n make-php languages
 ```

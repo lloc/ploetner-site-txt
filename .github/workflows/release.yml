@@ -1,7 +1,7 @@
 name: Release
 
 # Push a version tag (e.g. v1.1.0) to build the deployable plugin zip and
-# attach it to a GitHub Release under a fixed name (ploetner-llms-txt.zip).
+# attach it to a GitHub Release under a fixed name (ploetner-site-txt.zip).
 on:
   push:
     tags:
@@ -34,5 +34,5 @@ jobs:
       - name: Publish release with the zip asset
         uses: softprops/action-gh-release@v2
         with:
-          files: ploetner-llms-txt.zip
+          files: ploetner-site-txt.zip
           generate_release_notes: true

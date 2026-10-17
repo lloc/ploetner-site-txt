@@ -2,12 +2,12 @@
 /**
  * Base test case wiring Brain Monkey into PHPUnit.
  *
- * @package PloetnerLlmsTxt
+ * @package PloetnerSiteTxt
  */
 
 declare(strict_types=1);
 
-namespace lloc\PloetnerLlmsTxt\Tests;
+namespace lloc\PloetnerSiteTxt\Tests;
 
 use Brain\Monkey;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;

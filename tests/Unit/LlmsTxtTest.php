@@ -2,25 +2,25 @@
 /**
  * Tests for the llms.txt generator.
  *
- * @package PloetnerLlmsTxt
+ * @package PloetnerSiteTxt
  */
 
 declare(strict_types=1);
 
-namespace lloc\PloetnerLlmsTxt\Tests\Unit;
+namespace lloc\PloetnerSiteTxt\Tests\Unit;
 
 use Brain\Monkey\Filters;
 use Brain\Monkey\Functions;
-use lloc\PloetnerLlmsTxt\Generator;
-use lloc\PloetnerLlmsTxt\Settings;
-use lloc\PloetnerLlmsTxt\Tests\TestCase;
+use lloc\PloetnerSiteTxt\LlmsTxt;
+use lloc\PloetnerSiteTxt\Settings;
+use lloc\PloetnerSiteTxt\Tests\TestCase;
 
 require_once __DIR__ . '/stubs.php';
 
 /**
- * @coversDefaultClass \lloc\PloetnerLlmsTxt\Generator
+ * @coversDefaultClass \lloc\PloetnerSiteTxt\LlmsTxt
  */
-class GeneratorTest extends TestCase {
+class LlmsTxtTest extends TestCase {
 
 	/**
 	 * Options returned by get_option().
@@ -36,8 +36,8 @@ class GeneratorTest extends TestCase {
 		parent::setUp();
 
 		$this->options = array(
-			Settings::OPTION => '',
-			'page_on_front'  => 0,
+			Settings::LLMS_OPTION => '',
+			'page_on_front'       => 0,
 		);
 		Functions\when( 'get_option' )->alias( fn ( string $name, $fallback = false ) => $this->options[ $name ] ?? $fallback );
 		Functions\when( 'get_current_blog_id' )->justReturn( 3 );
@@ -75,10 +75,10 @@ class GeneratorTest extends TestCase {
 	 * @covers ::content
 	 */
 	public function test_stored_content_wins_and_ends_with_one_newline(): void {
-		$this->options[ Settings::OPTION ] = "# Custom\n\n> Hand written.\n\n\n";
+		$this->options[ Settings::LLMS_OPTION ] = "# Custom\n\n> Hand written.\n\n\n";
 		Functions\expect( 'get_pages' )->never();
 
-		$this->assertSame( "# Custom\n\n> Hand written.\n", ( new Generator() )->content() );
+		$this->assertSame( "# Custom\n\n> Hand written.\n", ( new LlmsTxt() )->content() );
 	}
 
 	/**
@@ -103,7 +103,7 @@ class GeneratorTest extends TestCase {
 			. "- [Home](https://ploetner.cloud/home/)\n"
 			. "- [Audit (Sprint)](https://ploetner.cloud/audit/): What the audit covers.\n";
 
-		$this->assertSame( $expected, ( new Generator() )->content() );
+		$this->assertSame( $expected, ( new LlmsTxt() )->content() );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class GeneratorTest extends TestCase {
 		Functions\when( 'get_bloginfo' )->alias( static fn ( string $key ): string => 'name' === $key ? 'msls.co' : '' );
 		Functions\when( 'get_pages' )->justReturn( false );
 
-		$this->assertSame( "# msls.co\n", ( new Generator() )->generate() );
+		$this->assertSame( "# msls.co\n", ( new LlmsTxt() )->generate() );
 	}
 
 	/**
@@ -126,29 +126,29 @@ class GeneratorTest extends TestCase {
 		Functions\when( 'home_url' )->justReturn( 'https://msls.co' );
 		Functions\when( 'wp_parse_url' )->alias( static fn ( string $url, int $component = -1 ) => parse_url( $url, $component ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url
 
-		$this->assertSame( "# msls.co\n", ( new Generator() )->generate() );
+		$this->assertSame( "# msls.co\n", ( new LlmsTxt() )->generate() );
 	}
 
 	/**
 	 * @covers ::content
 	 */
 	public function test_filter_can_extend_or_disable(): void {
-		$this->options[ Settings::OPTION ] = '# Site';
+		$this->options[ Settings::LLMS_OPTION ] = '# Site';
 
 		Filters\expectApplied( 'ploetner_llms_txt' )
 			->once()
 			->with( '# Site', 3, true )
 			->andReturn( "# Site\n\n## Optional\n\n- [API](https://example.test/api)" );
-		$this->assertStringEndsWith( "(https://example.test/api)\n", ( new Generator() )->content() );
+		$this->assertStringEndsWith( "(https://example.test/api)\n", ( new LlmsTxt() )->content() );
 	}
 
 	/**
 	 * @covers ::content
 	 */
 	public function test_empty_filter_result_means_no_llms_txt(): void {
-		$this->options[ Settings::OPTION ] = '# Site';
+		$this->options[ Settings::LLMS_OPTION ] = '# Site';
 		Filters\expectApplied( 'ploetner_llms_txt' )->once()->andReturn( '   ' );
 
-		$this->assertSame( '', ( new Generator() )->content() );
+		$this->assertSame( '', ( new LlmsTxt() )->content() );
 	}
 }
