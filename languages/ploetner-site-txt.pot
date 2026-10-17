@@ -1,0 +1,120 @@
+# Copyright (C) 2026 Dennis Ploetner
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Ploetner Site TXT 2.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ploetner-site-txt\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-17T09:44:40+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: ploetner-site-txt\n"
+
+#. Plugin Name of the plugin
+#: ploetner-site-txt.php
+msgid "Ploetner Site TXT"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: ploetner-site-txt.php
+msgid "https://github.com/lloc/ploetner-site-txt"
+msgstr ""
+
+#. Description of the plugin
+#: ploetner-site-txt.php
+msgid "Serves per-site text files in multisite and multi-network installs: llms.txt (from a text field, or generated from the site) and /.well-known/security.txt (RFC 9116), both under Settings, Reading."
+msgstr ""
+
+#. Author of the plugin
+#: ploetner-site-txt.php
+msgid "Dennis Ploetner"
+msgstr ""
+
+#. Author URI of the plugin
+#: ploetner-site-txt.php
+msgid "https://ploetner.dev"
+msgstr ""
+
+#: src/MuLoaderNotice.php:77
+msgid "Loaded on every site by a must-use loader (mu-plugins). No activation needed."
+msgstr ""
+
+#: src/Settings.php:73
+msgid "Site text files"
+msgstr ""
+
+#: src/Settings.php:80
+msgid "llms.txt"
+msgstr ""
+
+#: src/Settings.php:89
+msgid "security.txt"
+msgstr ""
+
+#: src/Settings.php:165
+msgid "Markdown for this site's llms.txt. Leave empty to generate it from the site title, tagline and top-level pages."
+msgstr ""
+
+#: src/Settings.php:167
+msgid "View llms.txt"
+msgstr ""
+
+#: src/Settings.php:180
+msgid "A security.txt belongs to the root of a domain. It is set on the site at the root of this domain, not here."
+msgstr ""
+
+#: src/Settings.php:194
+msgid "Contact (required): e-mail addresses or https links, one per line. Leave empty to serve no security.txt."
+msgstr ""
+
+#: src/Settings.php:202
+msgid "Expires: when the details should be reviewed. Empty or past: one year from today."
+msgstr ""
+
+#: src/Settings.php:208
+msgid "Policy (optional): https link to your disclosure policy"
+msgstr ""
+
+#: src/Settings.php:209
+msgid "Encryption (optional): https link to your OpenPGP key"
+msgstr ""
+
+#: src/Settings.php:210
+msgid "Acknowledgments (optional): https link to a thank-you page"
+msgstr ""
+
+#: src/Settings.php:225
+msgid "Preferred languages (optional), e.g. \"en, de\". Empty: the site language."
+msgstr ""
+
+#: src/Settings.php:235
+msgid "Served at /.well-known/security.txt (RFC 9116)."
+msgstr ""
+
+#: src/Settings.php:237
+msgid "View security.txt"
+msgstr ""
+
+#: src/Settings.php:263
+msgid "The security.txt of this site has expired. Please review the contact details and set a new date."
+msgstr ""
+
+#: src/Settings.php:265
+msgid "The security.txt of this site expires today. Please review it and set a new date."
+msgstr ""
+
+#. translators: %d: number of days.
+#: src/Settings.php:269
+#, php-format
+msgid "The security.txt of this site expires in %d day. Please review it and set a new date."
+msgid_plural "The security.txt of this site expires in %d days. Please review it and set a new date."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Settings.php:278
+msgid "Review security.txt"
+msgstr ""
