@@ -106,7 +106,7 @@ class SecurityTxtTest extends TestCase {
 	 */
 	public function test_contacts_accept_mail_https_and_tel_only(): void {
 		$this->assertSame(
-			array( 'mailto:a@example.com', 'https://example.com/r', 'tel:+39 02 1234' ),
+			array( 'mailto:a@example.com', 'https://example.com/r', 'tel:+39021234' ),
 			SecurityTxt::contacts( "a@example.com\r\nMAILTO:a@example.com\nhttps://example.com/r\nhttp://example.com\ntel:+39 02 1234\nftp://x\n\n" )
 		);
 	}
@@ -127,6 +127,7 @@ class SecurityTxtTest extends TestCase {
 	public function test_expires_at_needs_a_date(): void {
 		$this->assertSame( strtotime( '2027-10-01T23:59:59Z' ), SecurityTxt::expires_at( '2027-10-01' ) );
 		$this->assertNull( SecurityTxt::expires_at( 'next year' ) );
+		$this->assertNull( SecurityTxt::expires_at( '2027-02-31' ), 'No rollover into March.' );
 		$this->assertNull( SecurityTxt::expires_at( '' ) );
 	}
 }

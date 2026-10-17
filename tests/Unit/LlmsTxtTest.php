@@ -89,13 +89,23 @@ class LlmsTxtTest extends TestCase {
 	 */
 	public function test_generated_default_from_title_tagline_and_pages(): void {
 		$this->options['page_on_front'] = 2;
-		Functions\when( 'get_pages' )->justReturn(
-			array(
-				self::page( 1, 'Audit [Sprint]', 'audit', 'What the audit covers.' ),
-				self::page( 2, 'Home', 'home' ),
-				self::page( 3, 'Secret', 'secret', '', 'pw' ),
+		Functions\when( 'get_post' )->justReturn( self::page( 2, 'Home', 'home' ) );
+		Functions\expect( 'get_pages' )
+			->once()
+			->with(
+				\Mockery::subset(
+					array(
+						'number'  => LlmsTxt::MAX_PAGES - 1,
+						'exclude' => array( 2 ),
+					)
+				)
 			)
-		);
+			->andReturn(
+				array(
+					self::page( 1, 'Audit [Sprint]', 'audit', 'What the audit covers.' ),
+					self::page( 3, 'Secret', 'secret', '', 'pw' ),
+				)
+			);
 
 		$expected = "# Ploetner & Cloud\n\n"
 			. "> WordPress audits and fix sprints\n\n"
@@ -104,6 +114,29 @@ class LlmsTxtTest extends TestCase {
 			. "- [Audit (Sprint)](https://ploetner.cloud/audit/): What the audit covers.\n";
 
 		$this->assertSame( $expected, ( new LlmsTxt() )->content() );
+	}
+
+	/**
+	 * @covers ::page_links
+	 */
+	public function test_an_unpublished_front_page_is_left_out(): void {
+		$this->options['page_on_front'] = 2;
+		$draft                          = self::page( 2, 'Home', 'home' );
+		$draft->post_status             = 'draft';
+		Functions\when( 'get_post' )->justReturn( $draft );
+		Functions\expect( 'get_pages' )
+			->once()
+			->with(
+				\Mockery::subset(
+					array(
+						'number'  => LlmsTxt::MAX_PAGES,
+						'exclude' => array(),
+					)
+				)
+			)
+			->andReturn( array() );
+
+		$this->assertStringNotContainsString( 'Home', ( new LlmsTxt() )->generate() );
 	}
 
 	/**

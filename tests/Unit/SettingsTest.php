@@ -111,7 +111,7 @@ class SettingsTest extends TestCase {
 		);
 
 		$this->assertSame( "mailto:security@example.com\nhttps://example.com/report", $fields['contact'] );
-		$this->assertSame( gmdate( 'Y-m-d', strtotime( '+1 year' ) ), $fields['expires'], 'A past date becomes one year from today.' );
+		$this->assertSame( gmdate( 'Y-m-d', strtotime( '+1 year -1 day' ) ), $fields['expires'], 'A past date becomes just under one year from today.' );
 		$this->assertSame( '', $fields['policy'] );
 		$this->assertSame( 'https://example.com/pgp.asc', $fields['encryption'] );
 		$this->assertSame( '', $fields['acknowledgments'] );
@@ -223,5 +223,15 @@ class SettingsTest extends TestCase {
 		ob_start();
 		( new Settings() )->expiry_notice();
 		$this->assertSame( '', (string) ob_get_clean() );
+
+		Functions\when( 'get_option' )->justReturn(
+			array(
+				'contact' => 'https://example.com/r',
+				'expires' => gmdate( 'Y-m-d' ),
+			)
+		);
+		ob_start();
+		( new Settings() )->expiry_notice();
+		$this->assertStringContainsString( 'expires today', (string) ob_get_clean() );
 	}
 }

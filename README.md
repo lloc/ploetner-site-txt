@@ -27,7 +27,7 @@ so existing content stays.
   rewrite rules need flushing on any site. Works for sites in subdirectories
   (`example.com/site/llms.txt`) and with mapped domains.
 - **Response:** `200`, `text/plain; charset=utf-8`, `Cache-Control: public,
-  max-age=3600`, `X-Robots-Tag: noindex`. `HEAD` gets headers only. An empty
+  max-age=3600`, `X-Robots-Tag: noindex`, `X-Content-Type-Options: nosniff`. `HEAD` gets headers only. An empty
   result answers `404`.
 
 ### security.txt
@@ -37,7 +37,7 @@ so existing content stays.
   site with its own domain); sites in a subdirectory show a note instead.
 - **Fields:** Contact (required; e-mail addresses become `mailto:`, `https` and
   `tel:` links pass), Expires (required; empty or past becomes one year from
-  today on save), Policy, Encryption and Acknowledgments (optional, `https`
+  today, minus one day, on save), Policy, Encryption and Acknowledgments (optional, `https`
   only), Preferred-Languages (defaults to the site language). `Canonical` is
   added automatically.
 - **No contact, no file:** without a contact the path answers `404`.
